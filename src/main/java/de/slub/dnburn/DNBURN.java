@@ -144,6 +144,9 @@ final public class DNBURN {
             }
         }
         int lastDigit = ((charcode < 10) ? (charcode) : (charcode % 10));
+        if (lastDigit == 0) {
+            throw new IllegalStateException("Last digit of URN is 0");
+        }
         int checkDigit = (sum / lastDigit) % 10;
         return Integer.toString(checkDigit).charAt(0);
     }
