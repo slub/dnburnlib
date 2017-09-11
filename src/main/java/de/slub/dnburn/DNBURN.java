@@ -143,6 +143,11 @@ final public class DNBURN {
         return toString().hashCode();
     }
 
+    @Override
+    protected DNBURN clone() throws CloneNotSupportedException {
+        return new DNBURN(nbnurn, checkDigit);
+    }
+
     private static char calculateCheckDigit(NBNURN nbnurn) {
         int sum = URN_NBN_DE_PART_CHECKSUM;
         int index = 22;
