@@ -65,6 +65,12 @@
     <dependencies>
         <dependency>
             <groupId>de.slub-dresden</groupId>
+            <artifactId>urnlib</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.slub-dresden</groupId>
             <artifactId>nbnurnlib</artifactId>
             <version>1.0.0</version>
         </dependency>
