@@ -131,6 +131,18 @@ final public class DNBURN {
         return new DNBURN(nbnurn, parsedCheckDigit);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        DNBURN that = (DNBURN) obj;
+        return obj instanceof DNBURN &&
+                (this.nbnurn.equals(that.nbnurn) && this.checkDigit == that.checkDigit);
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
     private static char calculateCheckDigit(NBNURN nbnurn) {
         int sum = URN_NBN_DE_PART_CHECKSUM;
         int index = 22;
