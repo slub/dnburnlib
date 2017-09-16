@@ -71,6 +71,7 @@ final public class DNBURN {
         put('_', 43);
         put('.', 47);
     }};
+    private static final String COUNTRY_CODE = "de";
     private final char checkDigit;
     private NBNURN nbnurn;
 
@@ -96,11 +97,26 @@ final public class DNBURN {
      * @throws IllegalArgumentException If the given string cannot be parsed into a DNB URN
      */
     public static DNBURN create(String str) {
-        if (str == null) {
-            throw new NullPointerException();
-        }
+        assertNotNull(str);
         try {
             return parse(str);
+        } catch (URNSyntaxException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+
+    public static DNBURN create(
+            String libraryNetworkAbbreviation,
+            String libraryIdentifier,
+            String uniqueNumber,
+            char checkDigit) {
+        assertNotNull(libraryNetworkAbbreviation);
+        assertNotNull(libraryIdentifier);
+        assertNotNull(uniqueNumber);
+        try {
+            NBNURN nbnurn = NBNURN.newInstance(COUNTRY_CODE, libraryNetworkAbbreviation + ":" + libraryIdentifier, uniqueNumber);
+            assertCheckDigitMatches(nbnurn, checkDigit);
+            return new DNBURN(nbnurn, checkDigit);
         } catch (URNSyntaxException e) {
             throw new IllegalArgumentException(e);
         }
@@ -120,32 +136,18 @@ final public class DNBURN {
      */
     public static DNBURN parse(String str) throws URNSyntaxException {
         NBNURN nbnurn = NBNURN.fromString(str.substring(0, str.length() - 1));
-        if (!nbnurn.getCountryCode().equals("de")) {
+        if (!nbnurn.getCountryCode().equals(COUNTRY_CODE)) {
             throw new InvalidNamespaceIdentifier(nbnurn.getCountryCode());
         }
         char parsedCheckDigit = str.charAt(str.length() - 1);
-        char calculatedCheckDigit = calculateCheckDigit(nbnurn);
-        if (calculatedCheckDigit != parsedCheckDigit) {
-            throw new InvalidCheckDigit(calculatedCheckDigit, parsedCheckDigit);
-        }
+        assertCheckDigitMatches(nbnurn, parsedCheckDigit);
         return new DNBURN(nbnurn, parsedCheckDigit);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        DNBURN that = (DNBURN) obj;
-        return obj instanceof DNBURN &&
-                (this.nbnurn.equals(that.nbnurn) && this.checkDigit == that.checkDigit);
-    }
-
-    @Override
-    public int hashCode() {
-        return toString().hashCode();
-    }
-
-    @Override
-    protected DNBURN clone() throws CloneNotSupportedException {
-        return new DNBURN(nbnurn, checkDigit);
+    private static void assertNotNull(String str) {
+        if (str == null) {
+            throw new NullPointerException();
+        }
     }
 
     private static char calculateCheckDigit(NBNURN nbnurn) {
@@ -166,6 +168,30 @@ final public class DNBURN {
         }
         int checkDigit = (sum / lastDigit) % 10;
         return Integer.toString(checkDigit).charAt(0);
+    }
+
+    private static void assertCheckDigitMatches(NBNURN nbnurn, char checkDigit) throws InvalidCheckDigit {
+        char calculatedCheckDigit = calculateCheckDigit(nbnurn);
+        if (calculatedCheckDigit != checkDigit) {
+            throw new InvalidCheckDigit(calculatedCheckDigit, checkDigit);
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        DNBURN that = (DNBURN) obj;
+        return obj instanceof DNBURN &&
+                (this.nbnurn.equals(that.nbnurn) && this.checkDigit == that.checkDigit);
+    }
+
+    @Override
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
+    @Override
+    protected DNBURN clone() throws CloneNotSupportedException {
+        return new DNBURN(nbnurn, checkDigit);
     }
 
     /**
