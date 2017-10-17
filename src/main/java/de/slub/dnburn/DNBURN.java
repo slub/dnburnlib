@@ -73,7 +73,7 @@ final public class DNBURN {
     }};
     private static final String COUNTRY_CODE = "de";
     private final char checkDigit;
-    private NBNURN nbnurn;
+    private final NBNURN nbnurn;
 
     private DNBURN(NBNURN nbnurn, char checkDigit) {
         this.nbnurn = nbnurn;
