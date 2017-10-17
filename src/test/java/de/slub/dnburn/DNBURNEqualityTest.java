@@ -4,8 +4,17 @@ import de.slub.urn.URNSyntaxException;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class DNBURNEqualityTest {
+
+    @Test
+    @SuppressWarnings("EqualsBetweenInconvertibleTypes")
+    public void Object_of_other_type_is_not_equal_to_URN() throws URNSyntaxException {
+        String string = "urn:nbn:de:gbv:089-3321752945";
+        DNBURN object = DNBURN.create(string);
+        assertFalse("Object of other type should not be eqal to DNBURN object", object.equals(string));
+    }
 
     @Test
     public void Lexically_equivalent_URNs_are_equal() throws URNSyntaxException {

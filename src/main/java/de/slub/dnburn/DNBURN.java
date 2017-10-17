@@ -178,10 +178,10 @@ final public class DNBURN {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        DNBURN that = (DNBURN) obj;
-        return obj instanceof DNBURN &&
-                (this.nbnurn.equals(that.nbnurn) && this.checkDigit == that.checkDigit);
+    public boolean equals(Object that) {
+        return that instanceof DNBURN
+                && (this.nbnurn.equals(((DNBURN) that).nbnurn)
+                && this.checkDigit == ((DNBURN) that).checkDigit);
     }
 
     @Override
