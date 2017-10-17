@@ -27,7 +27,7 @@
 
     <groupId>de.slub-dresden</groupId>
     <artifactId>dnburnlib</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <name>German National Bibliography Numbers (DNB URN)</name>
     <description>Java library for encoding National Bibliography Numbers for URN Service of the German National Library as Uniform Resource Names</description>
